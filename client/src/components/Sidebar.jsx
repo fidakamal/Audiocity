@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import "../stylesheets/Sidebar.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import UploadDialog from "./UploadDialog";
 import { Link } from "react-router-dom";
 
 class Sidebar extends React.Component {
   state = {
-    uploadDialogShown: false,
     selectedButton: "Home",
   };
 
@@ -66,23 +64,6 @@ class Sidebar extends React.Component {
               <i class="icon bi bi-music-note-list"></i>Playlists
             </button>
           </Link>
-          <button
-            onClick={() => {
-              this.setState({ uploadDialogShown: true });
-            }}
-          >
-            <i class="icon bi bi-cloud-arrow-up"></i>
-            Upload
-          </button>
-          <UploadDialog
-            onSearch={this.props.onSearch}
-            searchTerm={this.props.searchTerm}
-            show={this.state.uploadDialogShown}
-            user={this.props.user}
-            onHide={() => {
-              this.setState({ uploadDialogShown: false });
-            }}
-          />
         </div>
       </div>
     );
