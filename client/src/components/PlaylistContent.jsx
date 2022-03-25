@@ -63,7 +63,6 @@ class Content extends React.Component {
                 <th style={{ width: 250 + "px" }}>Title</th>
                 <th style={{ width: 250 + "px" }}>Artist</th>
                 <th style={{ width: 250 + "px" }}>Album</th>
-                <th style={{ width: 100 + "px" }}>Uploader</th>
                 <th style={{ width: 60 + "px" }}></th>
               </tr>
             </thead>
@@ -106,17 +105,6 @@ class Content extends React.Component {
                         to={"/search?" + item.album}
                       >
                         {item.album}
-                      </Link>
-                    </td>
-                    <td style={{ width: 100 + "px" }}>
-                      <Link
-                        onClick={(event) =>
-                          this.props.onSearch(event.target.textContent)
-                        }
-                        class="link"
-                        to={"/search?" + item.uploader}
-                      >
-                        {item.uploader}
                       </Link>
                     </td>
                     <td style={{ width: 60 + "px" }}>
