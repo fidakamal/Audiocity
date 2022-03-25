@@ -13,13 +13,10 @@ class Table extends React.Component {
     favoritePlaylistID: 0,
     hideNewPlaylistInput: true,
     previousSearchTerm: "",
-    user: "",
   };
 
   getPlaylists() {
-    Axios.get("http://localhost:3001/api/playlists", {
-      params: { owner: this.props.user },
-    }).then((response) => {
+    Axios.get("http://localhost:3001/api/playlists").then((response) => {
       this.setState({ playlists: response.data });
       this.state.playlists.forEach((playlist) => {
         if (playlist.name === "Favorites")
@@ -44,7 +41,6 @@ class Table extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ user: this.props.user });
     this.getData(this.getSearchTerm());
     this.getPlaylists();
   }
@@ -52,7 +48,6 @@ class Table extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.previousSearchTerm != nextProps.searchTerm)
       this.getData(nextProps.searchTerm);
-    this.setState({ user: nextProps.user });
   }
 
   getImage(item) {
@@ -87,7 +82,7 @@ class Table extends React.Component {
   createNewPlaylist = (inputField) => {
     this.setState({ hideNewPlaylistInput: true });
     Axios.post("http://localhost:3001/api/createplaylist", {
-      params: { username: this.props.user, playlist: inputField.value },
+      params: {playlist: inputField.value },
     }).then(() => {
       this.getPlaylists();
     });
@@ -112,11 +107,6 @@ class Table extends React.Component {
       );
   }
 
-  checkVisibility() {
-    if (this.state.user === "" || this.state.user === null) return false;
-    else return true;
-  }
-
   render() {
     if (this.state.data.length === 0) {
       return <p class="emptymessage">No results found!</p>;
@@ -132,7 +122,6 @@ class Table extends React.Component {
                 <th style={{ width: 250 + "px" }}>TITLE</th>
                 <th style={{ width: 250 + "px" }}>ARTIST</th>
                 <th style={{ width: 250 + "px" }}>ALBUM</th>
-                <th style={{ width: 100 + "px" }}>UPLOADER</th>
                 <th style={{ width: 40 + "px" }}></th>
               </tr>
             </thead>
@@ -177,23 +166,10 @@ class Table extends React.Component {
                         {item.album}
                       </Link>
                     </td>
-                    <td style={{ width: 120 + "px" }}>
-                      <Link
-                        onClick={(event) =>
-                          this.props.onSearch(event.target.textContent)
-                        }
-                        class="link"
-                        to={"/search?" + item.uploader}
-                      >
-                        {item.uploader}
-                      </Link>
-                    </td>
                     <td style={{ width: 40 + "px" }}>
                       <Dropdown className="favoritesList">
                         <Dropdown.Toggle
-                          className="dropdown"
-                          hidden={!this.checkVisibility()}
-                        >
+                          className="dropdown">
                           <i class="icon bi bi-three-dots"></i>
                         </Dropdown.Toggle>
 

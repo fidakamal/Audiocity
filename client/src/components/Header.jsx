@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import SearchBar from "./SearchBar";
-import ProfileBar from "./ProfileBar";
 import "../stylesheets/Header.css";
 import { withRouter } from "react-router-dom";
 
@@ -20,12 +19,6 @@ class Header extends React.Component {
     return (
       <div class="headerContent">
         <div class="searchBar">{this.getSearchBar()}</div>
-        <div class="profileDiv">
-          <ProfileBar
-            updateUser={(newUser) => this.props.updateUser(newUser)}
-            user={this.props.user}
-          />
-        </div>
       </div>
     );
   }

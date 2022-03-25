@@ -12,9 +12,7 @@ class Playlist extends React.Component {
   };
 
   getPlaylists() {
-    Axios.get("http://localhost:3001/api/playlists", {
-      params: { owner: this.props.user },
-    }).then((response) => {
+    Axios.get("http://localhost:3001/api/playlists").then((response) => {
       this.setState({ playlists: response.data });
     });
   }

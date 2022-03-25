@@ -19,7 +19,7 @@ class Footer extends React.Component {
     return (
       <React.Fragment>
         <div class="nowPlayingContainer">
-          <NowPlaying songID={this.props.songID} user={this.props.user} />
+          <NowPlaying songID={this.props.songID} />
         </div>
         <div class="volumeContainer">
           <VolumeControl

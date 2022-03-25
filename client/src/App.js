@@ -12,25 +12,24 @@ function App() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [songID, setSongID] = useState(0);
-  const [user, setUser] = useState(localStorage.getItem("user"));
   const [queue, setQueue] = useState([]);
 
   return (
   <Router>
     <div className="App">
       <div className="sidebar">
-        <Sidebar onSearch={(text) => setSearchTerm(text)} searchTerm={searchTerm} user={user}/>
+        <Sidebar onSearch={(text) => setSearchTerm(text)} searchTerm={searchTerm}/>
       </div>
       <div className="header">
-        <Header onSearch={(text) => setSearchTerm(text)} searchTerm={searchTerm} updateUser={(newUser) => setUser(newUser)} user={user}/>
+        <Header onSearch={(text) => setSearchTerm(text)} searchTerm={searchTerm}/>
       </div>
       <div className="body">
         <Switch>
           <Route path="/search">
-            <Table onSearch={(text) => setSearchTerm(text)} songID={songID} searchTerm={searchTerm} onPlay={(songID) => setSongID(songID)} onQueueChange={(queue) => setQueue(queue)} user={user}/>
+            <Table onSearch={(text) => setSearchTerm(text)} songID={songID} searchTerm={searchTerm} onPlay={(songID) => setSongID(songID)} onQueueChange={(queue) => setQueue(queue)}/>
           </Route>
           <Route path="/playlist">
-            <Playlists onSearch={(text) => setSearchTerm(text)} onPlay={(songID) => setSongID(songID)} user={user} onQueueChange={(queue) => setQueue(queue)}/>
+            <Playlists onSearch={(text) => setSearchTerm(text)} onPlay={(songID) => setSongID(songID)} onQueueChange={(queue) => setQueue(queue)}/>
           </Route>
           <Route path="/">
             <Home onArtistSelect={(artist) => setSearchTerm(artist)}/>
@@ -38,7 +37,7 @@ function App() {
         </Switch>
       </div>
       <div className="footer">
-        <Footer setSong={(songID) => setSongID(songID)} songID={songID} user={user} queue={queue}/>
+        <Footer setSong={(songID) => setSongID(songID)} songID={songID} queue={queue}/>
       </div>
     </div>
   </Router>

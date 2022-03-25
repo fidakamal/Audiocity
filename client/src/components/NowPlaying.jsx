@@ -9,7 +9,6 @@ class NowPlaying extends React.Component {
     artistName: "",
     albumArt: "",
     favorite: false,
-    user: "",
   };
 
   retrieveData(songID) {
@@ -36,9 +35,9 @@ class NowPlaying extends React.Component {
     });
   }
 
-  getFavoriteStatus(songID, username) {
+  getFavoriteStatus(songID) {
     Axios.get("http://localhost:3001/api/checkfavorite", {
-      params: { songID: songID, user: username },
+      params: { songID: songID},
     }).then((response) => {
       this.setState({ favorite: response.data });
     });
@@ -48,9 +47,8 @@ class NowPlaying extends React.Component {
     if (nextProps.songID != 0) {
       this.retrieveData(nextProps.songID);
       this.getAlbumArt(nextProps.songID);
-      this.getFavoriteStatus(nextProps.songID, nextProps.user);
+      this.getFavoriteStatus(nextProps.songID);
     }
-    this.setState({ user: nextProps.user });
   }
 
   getFavoriteIcon() {
@@ -61,13 +59,13 @@ class NowPlaying extends React.Component {
 
   unfavorite() {
     Axios.post("http://localhost:3001/api/unfavorite", {
-      params: { songID: this.props.songID, user: this.props.user },
+      params: { songID: this.props.songID},
     });
   }
 
   makeFavorite() {
     Axios.post("http://localhost:3001/api/favorite", {
-      params: { songID: this.props.songID, user: this.props.user },
+      params: { songID: this.props.songID},
     });
   }
 
@@ -78,12 +76,7 @@ class NowPlaying extends React.Component {
   };
 
   checkVisibility() {
-    if (
-      this.state.songName === "" ||
-      this.state.user === "" ||
-      this.state.user === null
-    )
-      return false;
+    if (this.state.songName === "") return false;
     else return true;
   }
 

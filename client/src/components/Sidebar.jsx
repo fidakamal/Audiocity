@@ -15,11 +15,6 @@ class Sidebar extends React.Component {
       .split("/")[1];
   }
 
-  optionalDivStyle = () => {
-    if (this.props.user === "" || this.props.user === null) return "hidden";
-    else return "";
-  };
-
   checkSelected(button) {
     if (button.toUpperCase() === this.state.selectedButton.toUpperCase())
       return "selected";
@@ -53,7 +48,7 @@ class Sidebar extends React.Component {
             <i class="icon bi bi-search"></i>Search
           </button>
         </Link>
-        <div class={"optional " + this.optionalDivStyle()}>
+        <div class={"optional"}>
           <Link class="link" to="/playlist">
             <button
               class={this.checkSelected("Playlist")}

@@ -40,17 +40,9 @@ app.post("/api/addtoplaylist", (req, res) => {
     })
 })
 
-app.get("/api/validateuser", (req, res) => {
-  const query = "SELECT email FROM users WHERE email=(?) AND password=(?)"
-  db.query(query, [req.query.userEmail, req.query.userPassword], (error, results, fields) => {
-    if (error)  return console.error(error.message);
-    res.send(results);
-  })
-})
-
 app.get("/api/playlists", (req, res) => {
-  const query = "SELECT ID, name FROM playlists WHERE owner = (?)";
-  db.query(query, [req.query.owner], (error, results, fields) => {
+  const query = "SELECT ID, name FROM playlists";
+  db.query(query, (error, results, fields) => {
     if (error)  return console.error(error.message);
     res.send(results);
   })
@@ -68,16 +60,8 @@ app.post("/api/deleteplaylist", (req, res) => {
 })
 
 app.post("/api/createplaylist", (req, res) => {
-  const query = "INSERT INTO playlists (name, owner) VALUES (?, ?)"
-  db.query(query, [req.body.params.playlist, req.body.params.username], (error, results, fields) => {
-    if (error)  return console.error(error.message);
-    res.send(results);
-  })
-})
-
-app.get("/api/checkuser", (req, res) => {
-  const query = "SELECT email FROM users WHERE email=(?)"
-  db.query(query, [req.query.userEmail], (error, results, fields) => {
+  const query = "INSERT INTO playlists (name) VALUES (?)"
+  db.query(query, [req.body.params.playlist], (error, results, fields) => {
     if (error)  return console.error(error.message);
     res.send(results);
   })
@@ -91,28 +75,20 @@ app.get("/api/playlistcontent", (req, res) => {
     results.forEach(element => {
       songs.push('"' + element.song_id + '"');
     });
-    query = "SELECT ID, title, artist, album, uploader, coverpath FROM music_files WHERE ID IN (" + songs + ")";
+    query = "SELECT ID, title, artist, album, coverpath FROM music_files WHERE ID IN (" + songs + ")";
     db.query(query, [songs], (error, results, fields) => {
       if (error)  return console.error(error.message);
       res.send(results);
     })
   })
 })
-  
-app.post("/api/register", (req, res) => {
-  const query = "INSERT INTO users VALUES (?, ?)";
-  db.query(query, [req.body.params.userEmail, req.body.params.userPassword], (error, results, fields) => {
-    if (error)  return console.error(error.message);
-    res.send("Done");
-  })
-})
 
 app.get("/api/query", (req, res) => {
     const searchTerm = "%" + (req.query.searchTerm) + "%";
 
-    const query = "SELECT ID, title, artist, album, uploader, coverpath FROM music_files WHERE ((title LIKE (?)) OR (artist LIKE (?)) OR (album LIKE (?)) OR (uploader LIKE (?)))"
+    const query = "SELECT ID, title, artist, album, coverpath FROM music_files WHERE ((title LIKE (?)) OR (artist LIKE (?)) OR (album LIKE (?)))"
 
-    db.query(query, [searchTerm, searchTerm, searchTerm, searchTerm], (error, results, fields) => {
+    db.query(query, [searchTerm, searchTerm, searchTerm], (error, results, fields) => {
         if (error) {
             return console.error(error.message);
         }
@@ -133,8 +109,8 @@ app.get("/api/song", (req, res) => {
 })
 
 app.post("/api/unfavorite", (req, res) => {
-  var query = "SELECT ID FROM playlists WHERE name = 'Favorites' AND owner = (?)"
-  db.query(query, [req.body.params.user], (error, results, fields) => {
+  var query = "SELECT ID FROM playlists WHERE name = 'Favorites'"
+  db.query(query, (error, results, fields) => {
     if(error) return console.error(error.message);
     query = "DELETE FROM playlist_songs WHERE playlist_id = (?) AND song_id = (?)"
     db.query(query, [results[0].ID, req.body.params.songID], (error, results, fields) => {
@@ -144,8 +120,8 @@ app.post("/api/unfavorite", (req, res) => {
 })
 
 app.post("/api/favorite", (req, res) => {
-  var query = "SELECT ID FROM playlists WHERE name = 'Favorites' AND owner = (?)"
-  db.query(query, [req.body.params.user], (error, results, fields) => {
+  var query = "SELECT ID FROM playlists WHERE name = 'Favorites'"
+  db.query(query, (error, results, fields) => {
     if (error)  return console.error(error.message);
     query = "INSERT INTO playlist_songs VALUES (?, ?)"
     db.query(query, [results[0].ID, req.body.params.songID], (error, results, fields) => {
@@ -155,8 +131,8 @@ app.post("/api/favorite", (req, res) => {
 })
 
 app.get("/api/checkfavorite", (req, res) => {
-  var query = "SELECT ID FROM playlists WHERE name = 'Favorites' AND owner = (?)"
-  db.query(query, [req.query.user], (error, results, fields) => {
+  var query = "SELECT ID FROM playlists WHERE name = 'Favorites'"
+  db.query(query, (error, results, fields) => {
     if (error)  return console.error(error.message);
     if (results.length === 0) return;
     query = "SELECT * FROM playlist_songs WHERE playlist_id = (?) AND song_id = (?)"
