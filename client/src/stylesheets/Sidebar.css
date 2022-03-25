@@ -45,11 +45,3 @@ h3 {
   font-size: 25px;
   margin: 0px;
 }
-
-.sidebarButtons .optional {
-  background-color: transparent;
-}
-
-.sidebarButtons .hidden {
-  display: none;
-}

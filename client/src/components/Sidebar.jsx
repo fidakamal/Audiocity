@@ -48,18 +48,16 @@ class Sidebar extends React.Component {
             <i class="icon bi bi-search"></i>Search
           </button>
         </Link>
-        <div class={"optional"}>
           <Link class="link" to="/playlist">
-            <button
-              class={this.checkSelected("Playlist")}
-              onClick={() => {
-                this.setState({ selectedButton: "Playlist" });
-              }}
-            >
-              <i class="icon bi bi-music-note-list"></i>Playlists
-            </button>
+              <button
+                  class={this.checkSelected("Playlist")}
+                  onClick={() => {
+                      this.setState({ selectedButton: "Playlist" });
+                  }}
+              >
+                  <i class="icon bi bi-music-note-list"></i>Playlists
+              </button>
           </Link>
-        </div>
       </div>
     );
   }
