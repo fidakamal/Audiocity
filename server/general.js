@@ -1,9 +1,13 @@
 import fs from "fs";
+import sqlite3 from "sqlite3";
 
-export function retrieveArtists(db, res) {
+const DBSOURCE = "db.sqlite";
+
+export function retrieveArtists(res) {
     const query = "SELECT artist, coverpath FROM music_files WHERE coverpath != '' GROUP BY artist";
-    db.query(query, (error, results, fields) => {
-        if (error)  return console.error(error.message);
+    let db = new sqlite3.Database(DBSOURCE);
+    db.all(query, [], (err, results) => {
+        if (err)    return console.error(err);
         res.send(results);
     })
 }
