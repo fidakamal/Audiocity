@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import SearchBar from "./SearchBar";
 import "../stylesheets/Header.css";
 import { withRouter } from "react-router-dom";
