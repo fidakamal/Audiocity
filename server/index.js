@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import mysql from 'mysql';
 import {retrieveArtists, getAlbumArt, getMetadata, streamSong, query} from './general.js';
 import {removeFromPlaylist, addToPlaylist, getPlaylists, deletePlaylist, createPlaylist, retrievePlaylistContent, checkFavorite} from './playlists.js';
 import {initDB} from "./database.js";
@@ -16,13 +15,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.use(cors());
 app.use(express.static(ALBUMART));
-
-const db = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "music_Streaming_service"
-})
 
 app.listen(3001, () => {
     console.log("running on port 3001");
