@@ -25,7 +25,7 @@ const MUSICDIR = "E:\\Music";
 
 app.listen(3001, () => {
     console.log("running on port 3001");
-    //initDB();
+    initDB();
     //getMusic(MUSICDIR, true);
 })
 
@@ -45,8 +45,8 @@ app.post("/api/favorite", (req, res) => { addToPlaylist(db, res, 0, req.body.par
 app.get("/api/checkfavorite", (req, res) => { checkFavorite(db, res, req.query.songID); })
 
 // general
-app.get("/api/metadata", (req, res) => { getMetadata(db, res, req.query.songID); })
-app.get("/api/albumart", (req, res) => { getAlbumArt(db, res, req.query.songID); })
+app.get("/api/metadata", (req, res) => { getMetadata(res, req.query.songID); })
+app.get("/api/albumart", (req, res) => { getAlbumArt(res, req.query.songID); })
 app.get("/api/artists", (req, res) => { retrieveArtists(res); })
-app.get("/api/song", (req, res) => { streamSong(db, res, req.query.songID); })
-app.get("/api/query", (req, res) => { query(db, res, req.query.searchTerm); })
+app.get("/api/song", (req, res) => { streamSong(res, req.query.songID); })
+app.get("/api/query", (req, res) => { query(res, req.query.searchTerm); })

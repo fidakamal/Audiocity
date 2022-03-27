@@ -12,36 +12,40 @@ export function retrieveArtists(res) {
     })
 }
 
-export function getAlbumArt(db, res, songID) {
+export function getAlbumArt(res, songID) {
     const query = "SELECT coverpath FROM music_files WHERE ID = (?)";
-    db.query(query, songID, (error, results, fields) => {
+    let db = new sqlite3.Database(DBSOURCE);
+    db.get(query, songID, (error, results) => {
         if (error)  return  console.error(error.message);
         res.send(results)
     })
 }
 
-export function getMetadata(db, res, songID) {
+export function getMetadata(res, songID) {
     const query = "SELECT title, artist FROM music_files WHERE ID = (?)";
-    db.query(query, songID, (error, results, fields) => {
+    let db = new sqlite3.Database(DBSOURCE);
+    db.get(query, songID, (error, results) => {
         if (error)  return console.error(error.message);
         res.send(results);
     })
 }
 
-export function streamSong(db, res, songID) {
+export function streamSong(res, songID) {
     const query = "SELECT filepath FROM music_files WHERE ID = (?)";
-    db.query(query, [songID], (error, results, fields) => {
+    let db = new sqlite3.Database(DBSOURCE);
+    db.get(query, [songID], (error, results) => {
         if (error)  return console.error(error.message);
-        const filePath = results[0].filepath;
+        const filePath = results.filepath;
         res.setHeader("content-type", "audio/mpeg");
         fs.createReadStream(filePath).pipe(res);
     })
 }
 
-export function query(db, res, searchTerm) {
+export function query(res, searchTerm) {
     searchTerm = "%" + (searchTerm) + "%";
+    let db = new sqlite3.Database(DBSOURCE);
     const query = "SELECT ID, title, artist, album, coverpath FROM music_files WHERE ((title LIKE (?)) OR (artist LIKE (?)) OR (album LIKE (?)))"
-    db.query(query, [searchTerm, searchTerm, searchTerm], (error, results, fields) => {
+    db.all(query, [searchTerm, searchTerm, searchTerm], (error, results, fields) => {
         if (error)  return console.error(error.message);
         res.send(results);
     })

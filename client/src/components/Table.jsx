@@ -131,7 +131,7 @@ class Table extends React.Component {
                   <tr key={item.title}>
                     <td style={{ width: 40 + "px" }}>
                       <i
-                        data-id={item.ID}
+                        data-id={item.id}
                         onClick={(e) =>
                           this.play(e.target.getAttribute("data-id"))
                         }
