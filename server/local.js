@@ -3,7 +3,7 @@ import {addSong, resetDB} from "./database.js";
 import metadata from "music-metadata";
 import { nanoid } from 'nanoid';
 
-const artDir = "./Album Art/";
+const ARTDIR = "./Album Art/";
 
 function generateFileName() {
     var fileName = nanoid() + '.png';
@@ -14,9 +14,9 @@ function generateFileName() {
 function saveFile(filepath, tags) {
     let coverPath = "";
     if (tags.picture) {
-        if (!fs.existsSync(artDir)) fs.mkdirSync(artDir);
+        if (!fs.existsSync(ARTDIR)) fs.mkdirSync(ARTDIR);
         coverPath = generateFileName();
-        fs.writeFile(artDir + coverPath, tags.picture[0].data, () => {});
+        fs.writeFile(ARTDIR + coverPath, tags.picture[0].data, () => {});
     }
     return addSong(tags.title, tags.artist, tags.album, filepath, coverPath);
 }

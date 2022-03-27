@@ -2,7 +2,8 @@ import sqlite3 from "sqlite3";
 import fs from "fs";
 
 const DBSOURCE = "db.sqlite";
-const artDir = "./Album Art/";
+const ARTDIR = "./Album Art/";
+const FAVORITESID = 1;
 
 export function initDB() {
     let db = new sqlite3.Database(DBSOURCE);
@@ -11,7 +12,7 @@ export function initDB() {
         db.run(query);
         query = "CREATE TABLE IF NOT EXISTS playlists (ID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, UNIQUE (ID, name))";
         db.run(query);
-        query = "INSERT INTO playlists (id, name) VALUES(1, 'Favorites')";
+        query = "INSERT INTO playlists (id, name) VALUES(FAVORITESID, 'Favorites')";
         db.run(query, (error) => {if(error){}});
         query = "CREATE TABLE IF NOT EXISTS playlist_songs (playlist_id INTEGER, song_id INTEGER, PRIMARY KEY (playlist_id, song_id))";
         db.run(query);
@@ -20,7 +21,7 @@ export function initDB() {
 }
 
 export function resetDB() {
-    fs.rmSync(artDir, { recursive: true, force: true });
+    fs.rmSync(ARTDIR, { recursive: true, force: true });
     let db = new sqlite3.Database(DBSOURCE);
     db.serialize(() => {
         let query = "DELETE FROM music_files";

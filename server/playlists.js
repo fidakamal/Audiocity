@@ -1,6 +1,7 @@
 import sqlite3 from "sqlite3";
 
 const DBSOURCE = "db.sqlite";
+const FAVORITESID = 1;
 
 export function removeFromPlaylist(res, playlistID, songID) {
     const query = "DELETE FROM playlist_songs WHERE playlist_id=(?) AND song_id=(?)";
@@ -68,7 +69,7 @@ export function retrievePlaylistContent(res, playlistID) {
 export function checkFavorite(res, songID) {
     const query = "SELECT * FROM playlist_songs WHERE playlist_id=(?) AND song_id=(?)"
     let db = new sqlite3.Database(DBSOURCE);
-    db.get(query, [1, songID], (error, results, fields) => {
+    db.get(query, [FAVORITESID, songID], (error, results, fields) => {
         if (error)  return console.error(error.message);
         res.send(!(results === undefined));
     })

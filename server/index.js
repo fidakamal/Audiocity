@@ -7,10 +7,15 @@ import {removeFromPlaylist, addToPlaylist, getPlaylists, deletePlaylist, createP
 import {initDB} from "./database.js";
 import {getMusic} from "./local.js";
 
+const ALBUMART = "./Album Art";
+const MUSICDIR = "E:\\Music";
+const FAVORITESID = 1;
+
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.use(cors());
+app.use(express.static(ALBUMART));
 
 const db = mysql.createPool({
     host: "localhost",
@@ -18,10 +23,6 @@ const db = mysql.createPool({
     password: "",
     database: "music_Streaming_service"
 })
-
-var albumArt = "./Album Art";
-app.use(express.static(albumArt));
-const MUSICDIR = "E:\\Music";
 
 app.listen(3001, () => {
     console.log("running on port 3001");
@@ -40,8 +41,8 @@ app.post("/api/createplaylist", (req, res) => { createPlaylist(res, req.body.par
 app.get("/api/playlistcontent", (req, res) => { retrievePlaylistContent(res, req.query.playlistID); })
 
 // favorites
-app.post("/api/unfavorite", (req, res) => { removeFromPlaylist(res, 0, req.body.params.songID); })
-app.post("/api/favorite", (req, res) => { addToPlaylist(res, 0, req.body.params.songID); })
+app.post("/api/unfavorite", (req, res) => { removeFromPlaylist(res, FAVORITESID, req.body.params.songID); })
+app.post("/api/favorite", (req, res) => { addToPlaylist(res, FAVORITESID, req.body.params.songID); })
 app.get("/api/checkfavorite", (req, res) => { checkFavorite(res, req.query.songID); })
 
 // general
