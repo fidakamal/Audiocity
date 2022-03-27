@@ -46,7 +46,7 @@ class Table extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.previousSearchTerm != nextProps.searchTerm)
+    if (this.state.previousSearchTerm !== nextProps.searchTerm)
       this.getData(nextProps.searchTerm);
   }
 
@@ -59,7 +59,7 @@ class Table extends React.Component {
 
   play = (songID) => {
     var queue = [];
-    this.state.data.map((item) => {
+    this.state.data.forEach((item) => {
       queue.push(item.ID);
     });
     this.props.onQueueChange(queue);
@@ -139,7 +139,7 @@ class Table extends React.Component {
                       ></i>
                     </td>
                     <td style={{ width: 70 + "px" }} class="img">
-                      <img src={this.getImage(item)} />
+                      <img alt="" src={this.getImage(item)} />
                     </td>
                     <td style={{ width: 250 + "px" }} class="title">
                       {item.title}
@@ -196,17 +196,19 @@ class Table extends React.Component {
                           </Dropdown.Item>
                           {this.playlistInput()}
                           {playlists.reverse().map((playlist) => {
-                            if (playlist.ID != this.state.favoritePlaylistID)
+                            if (playlist.ID !== this.state.favoritePlaylistID) {
                               return (
-                                <Dropdown.Item
-                                  className="dropdown-item playlist"
-                                  onClick={() =>
-                                    this.addToPlaylist(item.ID, playlist.ID)
-                                  }
-                                >
-                                  {"Add to " + playlist.name}
-                                </Dropdown.Item>
+                                  <Dropdown.Item
+                                      className="dropdown-item playlist"
+                                      onClick={() =>
+                                          this.addToPlaylist(item.ID, playlist.ID)
+                                      }
+                                  >
+                                    {"Add to " + playlist.name}
+                                  </Dropdown.Item>
                               );
+                            }
+                            return <React.Fragment/>;
                           })}
                         </Dropdown.Menu>
                       </Dropdown>
