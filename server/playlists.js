@@ -1,61 +1,76 @@
-export function removeFromPlaylist(db, res, playlistID, songID) {
+import sqlite3 from "sqlite3";
+
+const DBSOURCE = "db.sqlite";
+
+export function removeFromPlaylist(res, playlistID, songID) {
     const query = "DELETE FROM playlist_songs WHERE playlist_id=(?) AND song_id=(?)";
-    db.query(query, [playlistID, songID], (error, results, fields) => {
+    let db = new sqlite3.Database(DBSOURCE);
+    db.run(query, [playlistID, songID], (error, results) => {
         if (error)  return console.error(error.message);
         res.send(results);
     })
+    db.close();
 }
 
-export function addToPlaylist(db, res, playlistID, songID) {
+export function addToPlaylist(res, playlistID, songID) {
     const query = "INSERT INTO playlist_songs VALUES (?, ?)"
-    db.query(query, [playlistID, songID], (error, results, fields) => {
+    let db = new sqlite3.Database(DBSOURCE);
+    db.run(query, [playlistID, songID], (error) => {
         if (error)  return console.error(error.message);
     })
+    db.close();
 }
 
-export function getPlaylists(db, res) {
+export function getPlaylists(res) {
     const query = "SELECT ID, name FROM playlists";
-    db.query(query, (error, results, fields) => {
+    let db = new sqlite3.Database(DBSOURCE);
+    db.all(query, (error, results) => {
         if (error)  return console.error(error.message);
         res.send(results);
     })
+    db.close();
 }
 
-export function deletePlaylist(db, res, playlistID) {
-    var query = "DELETE FROM playlist_songs WHERE playlist_id=(?)";
-    db.query(query, [playlistID] , (error, results, fields) => {
-        if (error)  return console.error(error.message);
-        query = "DELETE FROM playlists WHERE id=(?)";
-        db.query(query, [playlistID], (error, results, fields) => { res.send(results); })
-    })
-}
-
-export function createPlaylist(db, res, playlistName) {
-    const query = "INSERT INTO playlists (name) VALUES (?)"
-    db.query(query, [playlistName], (error, results, fields) => {
-        if (error)  return console.error(error.message);
-        res.send(results);
-    })
-}
-
-export function retrievePlaylistContent(db, res, playlistID) {
-    var query = "SELECT song_id FROM playlist_songs WHERE playlist_id = (?)";
-    var songs = [];
-    db.query(query, [playlistID], (error, results, fields) => {
-        if (error)  return console.error(error.message);
-        results.forEach(element => { songs.push('"' + element.song_id + '"'); });
-        query = "SELECT ID, title, artist, album, coverpath FROM music_files WHERE ID IN (" + songs + ")";
-        db.query(query, [songs], (error, results, fields) => {
+export function deletePlaylist(res, playlistID) {
+    let db = new sqlite3.Database(DBSOURCE);
+    db.serialize(function() {
+        let query = "DELETE FROM playlist_songs WHERE playlist_id=(?)";
+        db.run(query, [playlistID]);
+        query = "DELETE FROM playlists WHERE ID=(?)";
+        db.get(query, [playlistID], (error, results) => {
             if (error)  return console.error(error.message);
             res.send(results);
         })
     })
+    db.close();
 }
 
-export function checkFavorite(db, res, songID) {
-    const query = "SELECT * FROM playlist_songs WHERE playlist_id = (?) AND song_id = (?)"
-    db.query(query, [0, songID], (error, results, fields) => {
+export function createPlaylist(res, playlistName) {
+    const query = "INSERT INTO playlists (name) VALUES (?)";
+    let db = new sqlite3.Database(DBSOURCE);
+    db.get(query, [playlistName], (error, results) => {
         if (error)  return console.error(error.message);
-        res.send(!(results[0] === undefined));
+        res.send(results);
     })
+    db.close();
+}
+
+export function retrievePlaylistContent(res, playlistID) {
+    let db = new sqlite3.Database(DBSOURCE);
+    let query = "SELECT ID, title, artist, album, coverpath FROM music_files INNER JOIN playlist_songs ON music_files.id = playlist_songs.song_id WHERE playlist_songs.playlist_id=(?)";
+    db.all(query, [playlistID], (error, results) => {
+        if (error) return console.error(error.message);
+        res.send(results);
+    })
+    db.close();
+}
+
+export function checkFavorite(res, songID) {
+    const query = "SELECT * FROM playlist_songs WHERE playlist_id=(?) AND song_id=(?)"
+    let db = new sqlite3.Database(DBSOURCE);
+    db.get(query, [1, songID], (error, results, fields) => {
+        if (error)  return console.error(error.message);
+        res.send(!(results === undefined));
+    })
+    db.close();
 }

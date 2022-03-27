@@ -7,7 +7,13 @@ const artDir = "./Album Art/";
 export function initDB() {
     let db = new sqlite3.Database(DBSOURCE);
     db.serialize(function() {
-        const query = "CREATE TABLE IF NOT EXISTS music_files (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, artist TEXT, album TEXT, filepath TEXT, coverpath TEXT)";
+        let query = "CREATE TABLE IF NOT EXISTS music_files (ID INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, artist TEXT, album TEXT, filepath TEXT, coverpath TEXT)";
+        db.run(query);
+        query = "CREATE TABLE IF NOT EXISTS playlists (ID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, UNIQUE (ID, name))";
+        db.run(query);
+        query = "INSERT INTO playlists (id, name) VALUES(1, 'Favorites')";
+        db.run(query, (error) => {if(error){}});
+        query = "CREATE TABLE IF NOT EXISTS playlist_songs (playlist_id INTEGER, song_id INTEGER, PRIMARY KEY (playlist_id, song_id))";
         db.run(query);
     })
     db.close();
@@ -15,16 +21,12 @@ export function initDB() {
 
 export function resetDB() {
     fs.rmSync(artDir, { recursive: true, force: true });
-    let query1 = "DELETE FROM music_files";
-    let query2 = "DELETE FROM sqlite_sequence WHERE name='music_files'";
     let db = new sqlite3.Database(DBSOURCE);
     db.serialize(() => {
-        db.run(query1, (error) => {
-            if (error)  console.error(error.message);
-        })
-        db.run(query2, (error) => {
-            if (error)  console.error(error.message);
-        })
+        let query = "DELETE FROM music_files";
+        db.run(query);
+        query = "DELETE FROM sqlite_sequence WHERE name='music_files'";
+        db.run(query);
     });
     db.close();
 }

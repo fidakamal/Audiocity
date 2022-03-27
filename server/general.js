@@ -10,6 +10,7 @@ export function retrieveArtists(res) {
         if (err)    return console.error(err);
         res.send(results);
     })
+    db.close();
 }
 
 export function getAlbumArt(res, songID) {
@@ -19,6 +20,7 @@ export function getAlbumArt(res, songID) {
         if (error)  return  console.error(error.message);
         res.send(results)
     })
+    db.close();
 }
 
 export function getMetadata(res, songID) {
@@ -28,6 +30,7 @@ export function getMetadata(res, songID) {
         if (error)  return console.error(error.message);
         res.send(results);
     })
+    db.close();
 }
 
 export function streamSong(res, songID) {
@@ -39,6 +42,7 @@ export function streamSong(res, songID) {
         res.setHeader("content-type", "audio/mpeg");
         fs.createReadStream(filePath).pipe(res);
     })
+    db.close();
 }
 
 export function query(res, searchTerm) {
@@ -49,4 +53,5 @@ export function query(res, searchTerm) {
         if (error)  return console.error(error.message);
         res.send(results);
     })
+    db.close();
 }

@@ -10,7 +10,7 @@ class Table extends React.Component {
   state = {
     data: [],
     playlists: [],
-    favoritePlaylistID: 0,
+    favoritePlaylistID: 1,
     hideNewPlaylistInput: true,
     previousSearchTerm: "",
   };
@@ -131,7 +131,7 @@ class Table extends React.Component {
                   <tr key={item.title}>
                     <td style={{ width: 40 + "px" }}>
                       <i
-                        data-id={item.id}
+                        data-id={item.ID}
                         onClick={(e) =>
                           this.play(e.target.getAttribute("data-id"))
                         }
