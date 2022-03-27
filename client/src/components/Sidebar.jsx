@@ -25,6 +25,7 @@ class Sidebar extends React.Component {
       <div class="sidebarButtons">
         <div>
           <h3>Audiocity</h3>
+            <p>Local</p>
         </div>
         <Link class="link" to="/">
           <button
